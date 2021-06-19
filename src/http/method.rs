@@ -9,7 +9,7 @@ pub enum Method{
 }
 
 impl FromStr for Method{
-    type Err = String;
+    type Err = MethodError;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         match s{
@@ -17,7 +17,7 @@ impl FromStr for Method{
             "POST" => Ok(Self::POST),
             "PUT" => Ok(Self::PUT),
             "DELETE" => Ok(Self::DELETE),
-            _ => Err(String::from("error")),
+            _ => Err(MethodError),
         }
     }
 }
@@ -28,6 +28,4 @@ impl Display for Method{
     }
 }
 
-pub struct MethodError{
-
-}
+pub struct MethodError;
