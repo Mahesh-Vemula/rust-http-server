@@ -1,6 +1,7 @@
 use std::str::FromStr;
 use std::fmt::{Display, Formatter, Result as FmtResult};
 
+#[derive(Debug)]
 pub enum Method{
     GET,
     POST,
@@ -19,12 +20,6 @@ impl FromStr for Method{
             "DELETE" => Ok(Self::DELETE),
             _ => Err(MethodError),
         }
-    }
-}
-
-impl Display for Method{
-    fn fmt(&self, f: &mut Formatter<'_>) -> FmtResult {
-        write!(f, "{}", self)
     }
 }
 

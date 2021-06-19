@@ -1,4 +1,5 @@
 use super::method::Method;
+use super::{QueryString, QueryStringValue};
 use std::convert::TryFrom;
 use std::error::Error;
 use std::fmt::{Display, Formatter, Result as FmtResult, Debug};
@@ -6,16 +7,17 @@ use std::str;
 use std::str::Utf8Error;
 use crate::http::method::MethodError;
 
+#[derive(Debug)]
 pub struct Request<'buf>{
     path: &'buf str,
-    query_string: Option<&'buf str>,
+    query_string: Option<QueryString<'buf>>,
     method: Method
 }
 
-impl<'buf> TryFrom<&[u8]> for Request<'buf>{
+impl<'buf> TryFrom<&'buf [u8]> for Request<'buf>{
     type Error = ParseError;
 
-    fn try_from(buf: &[u8]) -> Result<Self, Self::Error> {
+    fn try_from(buf: &'buf [u8]) -> Result<Self, Self::Error> {
         let request = str::from_utf8(buf)?;
 
         let (method, request) = get_next_word(request).ok_or(ParseError::InvalidReqeust)?;
@@ -30,7 +32,7 @@ impl<'buf> TryFrom<&[u8]> for Request<'buf>{
 
         let mut query_string = None;
         if let Some(i) = path.find('?'){
-            query_string = Some(&path[i+1..]);
+            query_string = Some(QueryString::from( &path[i+1..]));
             path = &path[..i];
         }
 
@@ -55,11 +57,6 @@ impl From<MethodError> for ParseError{
     }
 }
 
-impl<'buf> Display for Request<'buf>{
-    fn fmt(&self, f: &mut Formatter<'_>) -> FmtResult {
-        write!(f,  " Request path: {}",  self.path)
-    }
-}
 
 fn get_next_word(request: &str) -> Option<(&str, &str)>{
     for(i,c) in request.chars().enumerate(){

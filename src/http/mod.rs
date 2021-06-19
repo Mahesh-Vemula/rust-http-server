@@ -1,6 +1,8 @@
 mod method;
 mod request;
+mod query_string;
 
-use method::Method;
+pub use method::Method;
 pub use request::Request;
 pub use request::ParseError;
+pub use query_string::{QueryString, Value as QueryStringValue};
