@@ -1,5 +1,4 @@
 use std::str::FromStr;
-use std::fmt::{Display, Formatter, Result as FmtResult};
 
 #[derive(Debug)]
 pub enum Method{

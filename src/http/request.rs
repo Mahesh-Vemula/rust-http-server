@@ -1,5 +1,5 @@
 use super::method::Method;
-use super::{QueryString, QueryStringValue};
+use super::{QueryString};
 use std::convert::TryFrom;
 use std::error::Error;
 use std::fmt::{Display, Formatter, Result as FmtResult, Debug};
@@ -36,7 +36,7 @@ impl<'buf> TryFrom<&'buf [u8]> for Request<'buf>{
 
         let (method, request) = get_next_word(request).ok_or(ParseError::InvalidReqeust)?;
         let (mut path, request) = get_next_word(request).ok_or(ParseError::InvalidReqeust)?;
-        let (protocol, request) = get_next_word(request).ok_or(ParseError::InvalidReqeust)?;
+        let (protocol, _request) = get_next_word(request).ok_or(ParseError::InvalidReqeust)?;
 
         if protocol != "HTTP/1.1"{
            return Err(ParseError::InvalidProtocol);
@@ -49,6 +49,8 @@ impl<'buf> TryFrom<&'buf [u8]> for Request<'buf>{
             query_string = Some(QueryString::from( &path[i+1..]));
             path = &path[..i];
         }
+
+
 
         Ok(Self{
             path,

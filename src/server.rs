@@ -1,7 +1,5 @@
-use std::net::{TcpListener, SocketAddr, TcpStream};
-use std::io::Error;
-use std::io::{Write, Read};
-//use super::Request;
+use std::net::{TcpListener};
+use std::io::{Read};
 use crate::http::{Request, Response, StatusCode, ParseError};
 use std::convert::TryFrom;
 
@@ -31,7 +29,7 @@ impl Server{
 
         loop{
             match listener.accept() {
-                Ok((mut stream, addr)) => {
+                Ok((mut stream, _addr)) => {
                     let mut buffer = [0; 1024];
                     match stream.read(&mut buffer){
                         Ok(_) => {

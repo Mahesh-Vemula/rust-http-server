@@ -1,5 +1,4 @@
 use std::collections::HashMap;
-use crate::http::query_string::Value::Single;
 
 #[derive(Debug)]
 pub struct QueryString<'buf>{
@@ -30,9 +29,9 @@ impl<'buf> From<&'buf str> for QueryString<'buf>{
                 value = &sub_str[i+1..]
             }
             data.entry(key)
-                .and_modify(|existingValue: &mut Value| match existingValue{
+                .and_modify(|existing_value: &mut Value| match existing_value{
                     Value::Single(prev_value) =>{
-                        *existingValue = Value::Multiple(vec![prev_value, value])
+                        *existing_value = Value::Multiple(vec![prev_value, value])
                     }
                     Value::Multiple(vec) => vec.push(value)
                 })
