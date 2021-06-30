@@ -18,7 +18,7 @@ impl Response{
     pub fn send(&self, stream: &mut impl Write) -> IOResult<()>{
         let body = match &self.body {
             Some(b) => b,
-            None => ""
+            None => "Error"
         };
         write!(
                 stream,
